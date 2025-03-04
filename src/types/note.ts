@@ -9,3 +9,11 @@ export interface Note {
     is_favorited:boolean;
     color:string | null;
 }
+
+export interface NoteFormData {
+    title: string;
+    content: string;
+    tags?: string[];
+    color?: string;
+    is_favorited?: boolean;
+}
