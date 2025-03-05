@@ -1,4 +1,5 @@
 export interface Note {
+    is_favorite: any;
     id:string;
     title:string;
     content: string;
@@ -15,5 +16,5 @@ export interface NoteFormData {
     content: string;
     tags?: string[];
     color?: string;
-    is_favorited?: boolean;
+    is_favorite?: boolean;
 }
