@@ -76,7 +76,34 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     }catch(error){
         set({error:error.message,loading:false});
     }
-  }
+  },
+
+  updateNote: async (id: string, noteData: Partial<NoteFormData>) => {
+    try {
+      set({ loading: true, error: null });
+      
+      const now = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'");
+      
+      const { data, error } = await supabase
+        .from('notes')
+        .update({
+          ...noteData,
+          updated_at: now
+        })
+        .eq('id', id)
+        .select();
+      
+      if (error) throw error;
+      
+      set((state) => ({ 
+        notes: state.notes.map(note => note.id === id ? (data[0] as Note) : note),
+        currentNote: state.currentNote?.id === id ? (data[0] as Note) : state.currentNote,
+        loading: false 
+      }));
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
 
 
 
