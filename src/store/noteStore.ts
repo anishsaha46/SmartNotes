@@ -38,43 +38,51 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     }
   },
 
-  getNoteById:async(id:string)=>{
-    try{
-        set({loading:true,error:null});
-        const {data,error}=await supabase
+  getNoteById: async (id: string) => {
+    try {
+      set({ loading: true, error: null });
+      const { data, error } = await supabase
         .from('notes')
         .select('*')
-        .eq('id',id)
+        .eq('id', id)
         .single();
-        if(error) throw error;
-        set({currentNote:data as Note,loading:false});
-    } catch(error){
-        set({error:error.message,loading:false});
+      
+      if (error) throw error;
+      
+      set({ currentNote: data as Note, loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
     }
   },
 
-  createNote:async (noteData:NoteFormData)=>{
-    try{
-        set({loading:true,error:null});
-        const {data:userData}=await supabase.auth.getUser();
-        if(!userData.user)throw new Error('User not found');
-        const now = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'");
-        const {data,error}=await supabase
+  createNote: async (noteData: NoteFormData) => {
+    try {
+      set({ loading: true, error: null });
+      
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error('User not authenticated');
+      
+      const now = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'");
+      
+      const { data, error } = await supabase
         .from('notes')
         .insert({
-            ...noteData,
-            user_id:userData.user.id,
-            created_at:now,
-            updated_at:now,
-            is_favorite:noteData.is_favorite || false
+          ...noteData,
+          user_id: userData.user.id,
+          created_at: now,
+          updated_at: now,
+          is_favorite: noteData.is_favorite || false
         })
         .select();
-        set((state)=>{
-            notes:[data[0] as Note,...state.notes],
-            loading:false
-        })
-    }catch(error){
-        set({error:error.message,loading:false});
+      
+      if (error) throw error;
+      
+      set((state) => ({ 
+        notes: [data[0] as Note, ...state.notes],
+        loading: false 
+      }));
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
     }
   },
 
@@ -105,25 +113,35 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     }
   },
 
-  deleteNote:async(id:string)=>{
-    try{
-        set({loading:true,error:null});
-        const {error}= await supabase
+  deleteNote: async (id: string) => {
+    try {
+      set({ loading: true, error: null });
+      
+      const { error } = await supabase
         .from('notes')
         .delete()
-        .eq('id',id)
-        if(error) throw error;
-        set((state)=>({
-            notes:state.notes.filter(note=>note.id !== id),
-            currentNote:state.currentNote?.id===id?null:
-            state.currentNote,
-            loading:false
-        }));
-    }catch(error:any){
-        set({error:error.message,loading:false});
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      set((state) => ({ 
+        notes: state.notes.filter(note => note.id !== id),
+        currentNote: state.currentNote?.id === id ? null : state.currentNote,
+        loading: false 
+      }));
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  toggleFavorite: async (id: string) => {
+    const note = get().notes.find(note => note.id === id);
+    if (!note) return;
+    
+    try {
+      await get().updateNote(id, { is_favorite: !note.is_favorite });
+    } catch (error: any) {
+      set({ error: error.message });
     }
   }
-
-
-
 }));
