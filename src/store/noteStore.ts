@@ -53,6 +53,31 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     }
   },
 
-  
+  createNote:async (noteData:NoteFormData)=>{
+    try{
+        set({loading:true,error:null});
+        const {data:userData}=await supabase.auth.getUser();
+        if(!userData.user)throw new Error('User not found');
+        const now = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'");
+        const {data,error}=await supabase
+        .from('notes')
+        .insert({
+            ...noteData,
+            user_id:userData.user.id,
+            created_at:now,
+            updated_at:now,
+            is_favorite:noteData.is_favorite || false
+        })
+        .select();
+        set((state)=>{
+            notes:[data[0] as Note,...state.notes],
+            loading:false
+        })
+    }catch(error){
+        set({error:error.message,loading:false});
+    }
+  }
+
+
 
 }));
