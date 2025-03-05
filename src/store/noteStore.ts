@@ -38,4 +38,21 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     }
   },
 
+  getNoteById:async(id:string)=>{
+    try{
+        set({loading:true,error:null});
+        const {data,error}=await supabase
+        .from('notes')
+        .select('*')
+        .eq('id',id)
+        .single();
+        if(error) throw error;
+        set({currentNote:data as Note,loading:false});
+    } catch(error){
+        set({error:error.message,loading:false});
+    }
+  },
+
+  
+
 }));
