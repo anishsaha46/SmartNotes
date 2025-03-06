@@ -6,7 +6,6 @@ DROP FUNCTION IF EXISTS create_profile_for_user();
 CREATE OR REPLACE FUNCTION create_profile_for_user()
 RETURNS TRIGGER AS $$
 BEGIN
-
   -- Insert with ON CONFLICT DO NOTHING to prevent errors with duplicate profiles
   INSERT INTO public.profiles (id)
   VALUES (NEW.id)
@@ -45,3 +44,19 @@ CREATE POLICY "Users can view their own profile"
   FOR SELECT
   TO authenticated
   USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can update their own profile" ON profiles;
+CREATE POLICY "Users can update their own profile"
+  ON profiles
+  FOR UPDATE
+  TO authenticated
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
+
+-- Add insert policy for profiles
+DROP POLICY IF EXISTS "Users can insert their own profile" ON profiles;
+CREATE POLICY "Users can insert their own profile"
+  ON profiles
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (auth.uid() = id);
