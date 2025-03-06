@@ -29,3 +29,10 @@ CREATE POLICY "Users can create their own notes"
   FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
+
+  -- Create policies for notes
+CREATE POLICY "Users can create their own notes"
+  ON notes
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (auth.uid() = user_id);
