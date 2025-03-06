@@ -77,3 +77,18 @@ CREATE TRIGGER update_notes_updated_at
 BEFORE UPDATE ON notes
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at();
+
+-- Create trigger to create a profile after user signup
+CREATE OR REPLACE FUNCTION create_profile_for_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id)
+  VALUES (NEW.id);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER create_profile_after_signup
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION create_profile_for_user();
