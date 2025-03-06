@@ -22,3 +22,10 @@ CREATE TABLE IF NOT EXISTS profiles (
 -- Enable Row Level Security
 ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for notes
+CREATE POLICY "Users can create their own notes"
+  ON notes
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (auth.uid() = user_id);
