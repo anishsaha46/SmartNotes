@@ -26,3 +26,11 @@ CREATE TRIGGER create_profile_after_signup
 AFTER INSERT ON auth.users
 FOR EACH ROW
 EXECUTE FUNCTION create_profile_for_user();
+
+-- Ensure the profiles table exists with the correct structure
+CREATE TABLE IF NOT EXISTS profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  created_at timestamptz DEFAULT now(),
+  username text DEFAULT NULL,
+  avatar_url text DEFAULT NULL
+);
