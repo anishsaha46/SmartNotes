@@ -20,3 +20,9 @@ EXCEPTION
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Recreate the trigger with the improved function
+CREATE TRIGGER create_profile_after_signup
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION create_profile_for_user();
