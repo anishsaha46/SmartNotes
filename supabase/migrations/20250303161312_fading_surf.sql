@@ -10,3 +10,11 @@ CREATE TABLE IF NOT EXISTS notes (
   is_favorite boolean DEFAULT false,
   color text DEFAULT NULL
 );
+
+-- Create profiles table
+CREATE TABLE IF NOT EXISTS profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  created_at timestamptz DEFAULT now(),
+  username text DEFAULT NULL,
+  avatar_url text DEFAULT NULL
+);
