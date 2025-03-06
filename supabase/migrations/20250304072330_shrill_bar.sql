@@ -11,3 +11,12 @@ BEGIN
   INSERT INTO public.profiles (id)
   VALUES (NEW.id)
   ON CONFLICT (id) DO NOTHING;
+  
+  RETURN NEW;
+EXCEPTION
+  WHEN OTHERS THEN
+    -- Log error but don't fail the transaction
+    RAISE NOTICE 'Error creating profile for user %: %', NEW.id, SQLERRM;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
