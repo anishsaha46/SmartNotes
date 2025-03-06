@@ -18,3 +18,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   username text DEFAULT NULL,
   avatar_url text DEFAULT NULL
 );
+
+-- Enable Row Level Security
+ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
