@@ -6,3 +6,8 @@ DROP FUNCTION IF EXISTS create_profile_for_user();
 CREATE OR REPLACE FUNCTION create_profile_for_user()
 RETURNS TRIGGER AS $$
 BEGIN
+
+  -- Insert with ON CONFLICT DO NOTHING to prevent errors with duplicate profiles
+  INSERT INTO public.profiles (id)
+  VALUES (NEW.id)
+  ON CONFLICT (id) DO NOTHING;
