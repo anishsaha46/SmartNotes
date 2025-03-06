@@ -34,3 +34,14 @@ CREATE TABLE IF NOT EXISTS profiles (
   username text DEFAULT NULL,
   avatar_url text DEFAULT NULL
 );
+
+-- Ensure RLS is enabled
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+-- Recreate the profile policies to ensure they exist
+DROP POLICY IF EXISTS "Users can view their own profile" ON profiles;
+CREATE POLICY "Users can view their own profile"
+  ON profiles
+  FOR SELECT
+  TO authenticated
+  USING (auth.uid() = id);
