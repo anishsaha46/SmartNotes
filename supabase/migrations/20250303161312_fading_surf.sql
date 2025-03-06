@@ -49,3 +49,10 @@ CREATE POLICY "Users can create their own notes"
   TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
+
+  -- Create policies for profiles
+CREATE POLICY "Users can view their own profile"
+  ON profiles
+  FOR SELECT
+  TO authenticated
+  USING (auth.uid() = id);
