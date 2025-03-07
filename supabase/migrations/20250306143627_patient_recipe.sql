@@ -135,3 +135,16 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Create trigger for notes
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_trigger 
+    WHERE tgname = 'update_notes_updated_at'
+  ) THEN
+    CREATE TRIGGER update_notes_updated_at
+      BEFORE UPDATE ON notes
+      FOR EACH ROW
+      EXECUTE FUNCTION update_updated_at();
+  END IF;
+END $$;
