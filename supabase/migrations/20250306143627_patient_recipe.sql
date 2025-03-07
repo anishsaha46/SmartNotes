@@ -1,3 +1,35 @@
+/*
+  # Initial Schema Setup
+
+  1. New Tables
+    - `profiles`
+      - `id` (uuid, primary key, references auth.users)
+      - `created_at` (timestamp)
+      - `username` (text, nullable)
+      - `avatar_url` (text, nullable)
+    - `notes`
+      - `id` (uuid, primary key)
+      - `created_at` (timestamp)
+      - `updated_at` (timestamp)
+      - `title` (text)
+      - `content` (text)
+      - `tags` (text array)
+      - `user_id` (uuid, references users)
+      - `is_favorite` (boolean)
+      - `color` (text)
+
+  2. Security
+    - Enable RLS on all tables
+    - Add policies for authenticated users to:
+      - View their own data
+      - Create their own data
+      - Update their own data
+      - Delete their own data
+
+  3. Triggers
+    - Add trigger to update `updated_at` timestamp on notes
+*/
+
 -- Create profiles table
 CREATE TABLE IF NOT EXISTS profiles (
   id uuid PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
@@ -67,7 +99,6 @@ DO $$ BEGIN
   END IF;
 END $$;
 
-
 -- Create policies for notes
 DO $$ BEGIN
   IF NOT EXISTS (
@@ -126,7 +157,6 @@ DO $$ BEGIN
   END IF;
 END $$;
 
-
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
@@ -158,3 +188,16 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Create trigger for auth.users
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_trigger 
+    WHERE tgname = 'create_profile_on_signup'
+  ) THEN
+    CREATE TRIGGER create_profile_on_signup
+      AFTER INSERT ON auth.users
+      FOR EACH ROW
+      EXECUTE FUNCTION create_profile_for_user();
+  END IF;
+END $$;
