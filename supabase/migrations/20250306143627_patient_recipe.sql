@@ -18,3 +18,7 @@ CREATE TABLE IF NOT EXISTS notes (
   is_favorite boolean DEFAULT false,
   color text
 );
+
+-- Enable Row Level Security
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
