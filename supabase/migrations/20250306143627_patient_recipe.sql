@@ -125,3 +125,13 @@ DO $$ BEGIN
       USING (auth.uid() = user_id);
   END IF;
 END $$;
+
+
+-- Create updated_at trigger function
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
