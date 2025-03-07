@@ -148,3 +148,13 @@ DO $$ BEGIN
       EXECUTE FUNCTION update_updated_at();
   END IF;
 END $$;
+
+-- Create trigger function for creating profiles
+CREATE OR REPLACE FUNCTION create_profile_for_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id)
+  VALUES (NEW.id);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
