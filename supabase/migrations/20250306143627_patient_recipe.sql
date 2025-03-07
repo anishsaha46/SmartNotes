@@ -66,3 +66,62 @@ DO $$ BEGIN
       WITH CHECK (auth.uid() = id);
   END IF;
 END $$;
+
+
+-- Create policies for notes
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'notes' 
+    AND policyname = 'Users can view their own notes'
+  ) THEN
+    CREATE POLICY "Users can view their own notes"
+      ON notes
+      FOR SELECT
+      TO authenticated
+      USING (auth.uid() = user_id);
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'notes' 
+    AND policyname = 'Users can create their own notes'
+  ) THEN
+    CREATE POLICY "Users can create their own notes"
+      ON notes
+      FOR INSERT
+      TO authenticated
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'notes' 
+    AND policyname = 'Users can update their own notes'
+  ) THEN
+    CREATE POLICY "Users can update their own notes"
+      ON notes
+      FOR UPDATE
+      TO authenticated
+      USING (auth.uid() = user_id)
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'notes' 
+    AND policyname = 'Users can delete their own notes'
+  ) THEN
+    CREATE POLICY "Users can delete their own notes"
+      ON notes
+      FOR DELETE
+      TO authenticated
+      USING (auth.uid() = user_id);
+  END IF;
+END $$;
