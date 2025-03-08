@@ -14,4 +14,17 @@ const AuthForm: React.FC<AuthFormProps> = ({type}) => {
     const [password,setPassword] = useState('');
     const [validationError,setValidationError] = useState('');
     const {signIn, signUp, loading,error } = useAuthStore();
+
+    const validateForm = () => {
+        setValidationError('');
+        if(type == 'register' && password.length < 6){
+            setValidationError('Password must be at least 6 characters long');
+            return false;
+        }
+        return true;
+    };
+
+
+
+
 }
