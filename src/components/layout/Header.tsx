@@ -13,4 +13,6 @@ const Header: React.FC = () => {
         await signOut();
         navigate('/login');
     }; 
+
+    const isNotesPath = location.pathname.includes('/notes');
 }
