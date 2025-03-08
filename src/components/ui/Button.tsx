@@ -26,3 +26,15 @@ const Button: React.FC<ButtonProps> = ({
         outline: 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 focus:ring-gray-500',
         danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
       };
+
+      const sizeStyles = {
+        sm: 'px-3 py-1.5 text-sm',
+        md: 'px-4 py-2 text-base',
+        lg: 'px-6 py-3 text-lg',
+      };
+      
+      const widthStyles = fullWidth ? 'w-full' : '';
+      
+      const loadingStyles = isLoading ? 'opacity-70 cursor-not-allowed' : '';
+      
+      const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : '';
