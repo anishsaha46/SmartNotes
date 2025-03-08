@@ -200,4 +200,4 @@ DO $$ BEGIN
       FOR EACH ROW
       EXECUTE FUNCTION create_profile_for_user();
   END IF;
-END $$;
+END $$; 
