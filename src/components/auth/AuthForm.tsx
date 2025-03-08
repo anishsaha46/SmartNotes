@@ -24,7 +24,23 @@ const AuthForm: React.FC<AuthFormProps> = ({type}) => {
         return true;
     };
 
-
+    const handleSubmit = async(e:React.FormEvent)=>{
+        e.preventDefault();
+        if(!validateForm()){
+            return;
+        }
+        if(type == 'login'){
+            const success=await signIn(email,password);
+            if(success){
+                navigate('/notes');
+            }
+        } else {
+            const success=await signUp(email,password);
+            if(success){
+                navigate('/notes');
+            }
+        }
+    }
 
 
 }
