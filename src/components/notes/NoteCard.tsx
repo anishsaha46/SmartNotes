@@ -26,4 +26,10 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
             deleNode(note.id);
         }
     };
+
+    const handleEdit=(e:React.MouseEvent)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        navigate('/notes/edit/${note.id}');
+    };
 }
