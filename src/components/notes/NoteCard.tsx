@@ -32,4 +32,8 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
         e.stopPropagation();
         navigate('/notes/edit/${note.id}');
     };
+
+    const handleCardClick=()=>{
+        navigate(`/notes/${note.id}`);
+    }
 }
