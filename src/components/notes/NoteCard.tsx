@@ -18,4 +18,12 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
         e.stopPropagation();
         toggleFavorite(note.id);
     };
+
+    const handleDelete=(e:React.MouseEvent)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm("Are you sure you want to delete")){
+            deleNode(note.id);
+        }
+    };
 }
