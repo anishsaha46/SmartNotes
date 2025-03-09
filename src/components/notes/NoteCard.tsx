@@ -8,3 +8,14 @@ import { Link,useNavigate } from 'react-router-dom';
 interface NoteCardProps {
     note: Note;
 }
+
+const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
+    const {toggleFavorite,deleNode}=useNoteStore();
+    const navigate=useNavigate();
+
+    const handleToggleFavorite=(e:React.MouseEvent)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFavorite(note.id);
+    };
+}
