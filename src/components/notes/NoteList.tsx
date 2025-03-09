@@ -10,9 +10,19 @@ import { useEffect } from "react";
 const NoteList: React.FC=()=>{
     const {notes,fetchNotes,loading}=useNoteStore();
     const [searchTerm,setSearchTerm]=useState('');
-    const [showFavorites,setShowFavorites]=useState(false);
+    const [showFavoritesOnly,setShowFavoritesOnly]=useState(false);
 
     useEffect(()=>{
         fetchNotes();
     },[fetchNotes]);
+
+    const filteredNotes=notes.filter(note=>{
+        const matchesSearch= note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        note.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        note.tags.some(tag=>tag.toLowerCase().includes(searchTerm.toLowerCase()));
+
+        return setShowFavoritesOnly
+        ? matchesSearch && note.is_Favorite
+        : matchesSearch;
+    });
 }
