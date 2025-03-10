@@ -61,4 +61,10 @@ interface NoteFormProps {
     const handleColorChange=(color:string)=>{
       setFormData(prev => ({...prev,color}));
     }
+
+    const toogleFavorite=()=>{
+      setFormData(prev => ({...prev,is_favorite:!prev.is_favorite}));
+    };
+
+
   }
