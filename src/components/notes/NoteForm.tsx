@@ -79,5 +79,11 @@ interface NoteFormProps {
       }
     };
     
+    const handleRemoveTag = (tagToRemove: string) => {
+      setFormData(prev => ({
+        ...prev,
+        tags: prev.tags?.filter(tag => tag !== tagToRemove)
+      }));
+    };
 
   }
