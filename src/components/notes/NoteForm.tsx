@@ -22,3 +22,34 @@ interface NoteFormProps {
     '#fffbeb', // amber-50
     '#fdf4ff', // fuchsia-50
   ];
+
+  const NoteForm:React.FC<NoteFormProps> = ({noteId})=>{
+    const navigate=useNavigate();
+    const { currentNote,getNoteById,createNote,updateNote,loading,error } = useNoteStore();
+
+    const [formData,setFormData]=useState<NoteFormData>({
+        title:'',
+        content:'',
+        tags: [],
+        color: '#ffffff',
+        is_favorite: false,
+    });
+
+    const [tagInput,setTagInput]=useState('');
+    useEffect(()=>{
+      if(noteId){
+        getNoteById(noteId);
+      }
+    },[noteId,setTagInput]);
+    useEffect(()=>{
+      if(currentNote && noteId){
+        setFormData({
+          title: currentNote.title,
+          content: currentNote.content,
+          tags: currentNote.tags?? [],
+          color: currentNote.color?? '#ffffff',
+          is_favorite: currentNote.is_favorite?? false,
+        });
+      }
+    },[currentNote,noteId]);
+  }
