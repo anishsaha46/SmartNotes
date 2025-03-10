@@ -66,5 +66,18 @@ interface NoteFormProps {
       setFormData(prev => ({...prev,is_favorite:!prev.is_favorite}));
     };
 
+    const handleAddTag = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' && tagInput.trim()) {
+        e.preventDefault();
+        if (!formData.tags?.includes(tagInput.trim())) {
+          setFormData(prev => ({
+            ...prev,
+            tags: [...(prev.tags || []), tagInput.trim()]
+          }));
+        }
+        setTagInput('');
+      }
+    };
+    
 
   }
