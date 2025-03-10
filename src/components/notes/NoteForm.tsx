@@ -57,4 +57,8 @@ interface NoteFormProps {
       const {name,value}=e.target;
       setFormData(prev => ({...prev,[name]:value}));
     }
+
+    const handleColorChange=(color:string)=>{
+      setFormData(prev => ({...prev,color}));
+    }
   }
