@@ -86,4 +86,18 @@ interface NoteFormProps {
       }));
     };
 
+
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      
+      if (noteId) {
+        await updateNote(noteId, formData);
+      } else {
+        await createNote(formData);
+      }
+      
+      if (!error) {
+        navigate('/notes');
+      }
+    };
   }
