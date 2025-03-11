@@ -29,4 +29,20 @@ const NoteDetailPage:React.FC=()=>{
           </div>
         );
       }
+
+      if (!currentNote) {
+        return (
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center py-12 bg-gray-50 rounded-lg">
+              <p className="text-gray-500 mb-4">Note not found</p>
+              <Link to="/notes">
+                <Button variant="outline">
+                  <ArrowLeft size={18} className="mr-1" />
+                  Back to notes
+                </Button>
+              </Link>
+            </div>
+          </div>
+        );
+      }
 }
