@@ -5,3 +5,16 @@ import { format } from "date-fns";
 import { ArrowLeft,Edit,Trash2,Star } from "lucide-react";
 import Button from "../../components/ui/Button";
 
+const NoteDetailPage:React.FC=()=>{
+    const {id} =useParams<{id:string}>();
+    const navigate = useNavigate();
+    const {currentNote,getNoteById,deleteNote,toggleFavorite,loading}=useNoteStore();
+
+    useEffect( ()=>{
+        if(id){
+            getNoteById(id);
+        }
+    },[id,getNoteById]);
+
+    
+}
