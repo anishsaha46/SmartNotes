@@ -16,5 +16,11 @@ const NoteDetailPage:React.FC=()=>{
         }
     },[id,getNoteById]);
 
+    const handleToggleFavorite = async()=> {
+        if(id){
+            await toggleFavorite(id);
+        }
+    };
+
     
 }
