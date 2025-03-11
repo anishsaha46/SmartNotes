@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthForm from '../components/auth/AuthForm';
 import { ArrowLeft } from 'lucide-react';
-import Button from '../components/ui/Button';
+
 
 const LoginPage: React.FC = () => {
   return (
