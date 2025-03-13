@@ -1,4 +1,8 @@
 import './index.css'
+import React,{useEffect} from 'react'
+import { BrowserRouter,Routes,Route,Navigate } from 'react-router-dom'
+import { useAuthStore } from './store/authStore'
+
 
 function App() {
   return (
