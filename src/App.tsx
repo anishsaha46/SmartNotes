@@ -7,6 +7,16 @@ import { useAuthStore } from './store/authStore'
 import Layout from './components/layout/Layout'
 
 
+// Pages
+import HomePage from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import NotesPage from './pages/notes/NotesPage'
+import NoteDetailPage from './pages/notes/NoteDetailPage'
+import NewNotePage from './pages/notes/NewNotePage'
+import EditNotePage from './pages/notes/EditNotePage'
+import NotFoundPage from './pages/NoteFoundPage'
+
 function App() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-200">
