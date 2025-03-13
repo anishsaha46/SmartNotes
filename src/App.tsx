@@ -45,12 +45,20 @@ function App() {
   }, [getUser])
 
   return (
-    BrowserRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+
+
+          {/* Protected Routes */}
+          <Route path="notes" element={
+            <ProtectedRoute>
+              <NotesPage />
+            </ProtectedRoute>
+          } />
   )
 }
 
