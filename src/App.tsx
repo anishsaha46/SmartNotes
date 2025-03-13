@@ -71,6 +71,12 @@ function App() {
               <NewNotePage />
             </ProtectedRoute>
           } />
+
+<Route path="notes/edit/:id" element={
+            <ProtectedRoute>
+              <EditNotePage />
+            </ProtectedRoute>
+          } />
   )
 }
 
