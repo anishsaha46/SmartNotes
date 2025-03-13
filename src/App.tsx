@@ -65,6 +65,12 @@ function App() {
               <NoteDetailPage />
             </ProtectedRoute>
           } />
+
+<Route path="notes/new" element={
+            <ProtectedRoute>
+              <NewNotePage />
+            </ProtectedRoute>
+          } />
   )
 }
 
