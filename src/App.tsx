@@ -43,13 +43,14 @@ function App() {
   useEffect(() => {
     getUser();
   }, [getUser])
-  
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-blue-200">
-      <h1 className="text-4xl font-bold text-white">
-        Hello World
-      </h1>
-    </div>
+    BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
   )
 }
 
