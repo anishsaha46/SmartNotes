@@ -26,18 +26,21 @@ const NoteList: React.FC = () => {
   });
   
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">My Notes</h1>
+    <div className="container mx-auto p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 sm:mb-0">
+          My Notes
+          <div className="h-1 w-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-2"></div>
+        </h1>
         <Link to="/notes/new">
-          <Button>
-            <Plus size={18} className="mr-1" />
+          <Button className="transform hover:-translate-y-0.5 transition-transform duration-200">
+            <Plus size={18} className="mr-2" />
             New Note
           </Button>
         </Link>
       </div>
       
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row gap-4 mb-8">
         <div className="relative flex-grow">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search size={18} className="text-gray-400" />
@@ -47,21 +50,21 @@ const NoteList: React.FC = () => {
             placeholder="Search notes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="pl-10 pr-4 py-2.5 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm hover:border-gray-400"
           />
         </div>
         
         <button
           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-          className={`flex items-center px-4 py-2 rounded-md border ${
+          className={`flex items-center px-4 py-2.5 rounded-lg border transition-all duration-200 ${
             showFavoritesOnly 
-              ? 'bg-yellow-50 border-yellow-200 text-yellow-700' 
-              : 'border-gray-300 text-gray-700'
+              ? 'bg-gradient-to-r from-yellow-400 to-amber-500 border-transparent text-white shadow-md' 
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:shadow-sm'
           }`}
         >
           <Star 
             size={18} 
-            className="mr-2"
+            className="mr-2 transition-transform duration-200 hover:scale-110"
             fill={showFavoritesOnly ? 'currentColor' : 'none'}
           />
           Favorites
@@ -73,21 +76,21 @@ const NoteList: React.FC = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       ) : filteredNotes.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredNotes.map(note => (
             <NoteCard key={note.id} note={note} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500 mb-4">
+        <div className="text-center py-16 bg-gray-50 rounded-xl shadow-sm border border-gray-100 transition-all duration-300">
+          <p className="text-gray-500 mb-6">
             {searchTerm || showFavoritesOnly
               ? 'No notes match your search criteria'
               : 'You have no notes yet'}
           </p>
           <Link to="/notes/new">
-            <Button variant="outline">
-              <Plus size={18} className="mr-1" />
+            <Button variant="outline" className="transform hover:-translate-y-0.5 transition-transform duration-200">
+              <Plus size={18} className="mr-2" />
               Create your first note
             </Button>
           </Link>
