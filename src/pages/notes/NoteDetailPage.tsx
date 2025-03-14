@@ -40,7 +40,7 @@ const NoteDetailPage: React.FC = () => {
   if (!currentNote) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
+        <div className="text-center py-12 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
           <p className="text-gray-500 mb-4">Note not found</p>
           <Link to="/notes">
             <Button variant="outline">
@@ -56,14 +56,14 @@ const NoteDetailPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
-        <Link to="/notes" className="inline-flex items-center text-blue-600 hover:text-blue-800">
+        <Link to="/notes" className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200">
           <ArrowLeft size={18} className="mr-1" />
           Back to notes
         </Link>
       </div>
       
       <div 
-        className={`bg-white rounded-lg shadow-md p-6 mb-6 ${
+        className={`bg-white rounded-lg shadow-md p-6 mb-6 transition-all duration-200 hover:shadow-lg ${
           currentNote.color ? '' : 'border border-gray-200'
         }`}
         style={currentNote.color ? { backgroundColor: currentNote.color } : {}}
@@ -72,9 +72,9 @@ const NoteDetailPage: React.FC = () => {
           <h1 className="text-2xl font-bold">{currentNote.title}</h1>
           <button 
             onClick={handleToggleFavorite}
-            className="text-yellow-500 hover:text-yellow-600 focus:outline-none"
+            className="text-yellow-500 hover:text-yellow-600 focus:outline-none transition-colors duration-200"
           >
-            <Star fill={currentNote.is_favorite ? 'currentColor' : 'none'} size={20} />
+            <Star fill={currentNote.is_favorite ? 'currentColor' : 'none'} size={20} className="transition-transform hover:scale-110" />
           </button>
         </div>
         
@@ -91,7 +91,7 @@ const NoteDetailPage: React.FC = () => {
             {currentNote.tags.map(tag => (
               <span 
                 key={tag} 
-                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm bg-blue-100 text-blue-800"
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm bg-blue-100 text-blue-800 shadow-sm"
               >
                 {tag}
               </span>
@@ -102,7 +102,7 @@ const NoteDetailPage: React.FC = () => {
       
       <div className="flex justify-end space-x-3">
         <Link to={`/notes/edit/${currentNote.id}`}>
-          <Button variant="outline">
+          <Button variant="outline" className="transform hover:-translate-y-0.5 transition-transform duration-200">
             <Edit size={18} className="mr-1" />
             Edit
           </Button>
@@ -110,6 +110,7 @@ const NoteDetailPage: React.FC = () => {
         <Button 
           variant="danger"
           onClick={handleDelete}
+          className="transform hover:-translate-y-0.5 transition-transform duration-200"
         >
           <Trash2 size={18} className="mr-1" />
           Delete
