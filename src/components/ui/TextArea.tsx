@@ -29,10 +29,11 @@ const TextArea: React.FC<TextAreaProps> = ({
       <textarea
         id={textareaId}
         className={`
-          px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400 
+          px-4 py-2.5 bg-white border shadow-sm border-gray-300 placeholder-gray-400 
           focus:outline-none focus:border-blue-500 focus:ring-blue-500 block w-full 
-          rounded-md sm:text-sm focus:ring-1 min-h-[120px]
-          ${error ? 'border-red-500' : ''}
+          rounded-lg sm:text-sm focus:ring-1 transition-all duration-200 min-h-[120px]
+          hover:border-gray-400 resize-y
+          ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
           ${className}
         `}
         {...props}
