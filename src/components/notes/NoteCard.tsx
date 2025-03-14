@@ -48,20 +48,20 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
   return (
     <div 
       onClick={handleCardClick}
-      className={`relative border rounded-lg shadow-sm p-4 h-full transition-all hover:shadow-md ${textColor} cursor-pointer`}
+      className={`relative border rounded-lg shadow-sm p-4 h-full transition-all duration-200 hover:shadow-md ${textColor} cursor-pointer transform hover:-translate-y-1 hover:shadow-lg`}
       style={cardStyle}
     >
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-semibold text-lg truncate">{note.title}</h3>
         <button 
           onClick={handleToggleFavorite}
-          className="text-yellow-500 hover:text-yellow-600 focus:outline-none"
+          className="text-yellow-500 hover:text-yellow-600 focus:outline-none transition-colors duration-200"
         >
-          <Star fill={note.is_favorite ? 'currentColor' : 'none'} size={18} />
+          <Star fill={note.is_favorite ? 'currentColor' : 'none'} size={18} className="transition-transform hover:scale-110" />
         </button>
       </div>
       
-      <p className="text-sm mb-4 line-clamp-3">{note.content}</p>
+      <p className="text-sm mb-4 line-clamp-3 opacity-80">{note.content}</p>
       
       <div className="flex justify-between items-center mt-auto">
         <span className="text-xs opacity-70">
@@ -71,15 +71,15 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
         <div className="flex space-x-2">
           <button 
             onClick={handleEdit}
-            className="p-1 hover:bg-black/10 rounded"
+            className="p-1 hover:bg-black/10 rounded transition-colors duration-200"
           >
-            <Edit size={16} />
+            <Edit size={16} className="transition-transform hover:scale-110" />
           </button>
           <button 
             onClick={handleDelete}
-            className="p-1 hover:bg-black/10 rounded text-red-500"
+            className="p-1 hover:bg-black/10 rounded text-red-500 transition-colors duration-200"
           >
-            <Trash2 size={16} />
+            <Trash2 size={16} className="transition-transform hover:scale-110" />
           </button>
         </div>
       </div>
@@ -89,7 +89,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
           {note.tags.map((tag) => (
             <span 
               key={tag} 
-              className="text-xs px-2 py-0.5 rounded-full bg-black/10"
+              className="text-xs px-2 py-0.5 rounded-full bg-black/10 backdrop-blur-sm"
             >
               {tag}
             </span>
