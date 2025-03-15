@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNoteStore } from '../../store/noteStore';
+import { useAIStore } from '../../store/aiStore';
 import { NoteFormData } from '../../types/note';
 import Input from '../ui/Input';
 import TextArea from '../ui/TextArea';
 import Button from '../ui/Button';
-import { Star, X, Plus } from 'lucide-react';
+import { Star, X, Plus, Sparkles, FileText } from 'lucide-react';
 
 interface NoteFormProps {
   noteId?: string;
@@ -26,6 +27,7 @@ const COLORS = [
 const NoteForm: React.FC<NoteFormProps> = ({ noteId }) => {
   const navigate = useNavigate();
   const { currentNote, getNoteById, createNote, updateNote, loading, error } = useNoteStore();
+  const { generateContent, summarizeContent, isGenerating, isSummarizing } = useAIStore();
   
   const [formData, setFormData] = useState<NoteFormData>({
     title: '',
@@ -36,6 +38,9 @@ const NoteForm: React.FC<NoteFormProps> = ({ noteId }) => {
   });
   
   const [tagInput, setTagInput] = useState('');
+  const [showAIPrompt, setShowAIPrompt] = useState(false);
+  const [aiPrompt, setAIPrompt] = useState('');
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   
   useEffect(() => {
     if (noteId) {
@@ -86,6 +91,83 @@ const NoteForm: React.FC<NoteFormProps> = ({ noteId }) => {
       ...prev,
       tags: prev.tags?.filter(tag => tag !== tagToRemove)
     }));
+  };
+  
+  const handleGenerate = async () => {
+    if (!aiPrompt.trim()) return;
+    
+    const generatedContent = await generateContent(aiPrompt);
+    if (generatedContent) {
+      // Insert at cursor position if available, otherwise append to existing content
+      if (textAreaRef.current) {
+        const textArea = textAreaRef.current;
+        const start = textArea.selectionStart;
+        const end = textArea.selectionEnd;
+        const currentContent = formData.content;
+        
+        const newContent = 
+          currentContent.substring(0, start) + 
+          generatedContent + 
+          currentContent.substring(end);
+        
+        setFormData(prev => ({ ...prev, content: newContent }));
+      } else {
+        // Fallback: append to the end
+        setFormData(prev => ({ 
+          ...prev, 
+          content: prev.content ? `${prev.content}\n\n${generatedContent}` : generatedContent 
+        }));
+      }
+      
+      // Clear prompt and hide the prompt input
+      setAIPrompt('');
+      setShowAIPrompt(false);
+    }
+  };
+  
+  const handleSummarize = async () => {
+    // If there's a text selection, summarize only that part
+    let contentToSummarize = formData.content;
+    
+    if (textAreaRef.current) {
+      const textArea = textAreaRef.current;
+      const start = textArea.selectionStart;
+      const end = textArea.selectionEnd;
+      
+      if (start !== end) {
+        // There is a selection
+        contentToSummarize = formData.content.substring(start, end);
+      }
+    }
+    
+    if (!contentToSummarize.trim()) return;
+    
+    const summary = await summarizeContent(contentToSummarize);
+    if (summary) {
+      // If we summarized a selection, replace it; otherwise append the summary
+      if (textAreaRef.current) {
+        const textArea = textAreaRef.current;
+        const start = textArea.selectionStart;
+        const end = textArea.selectionEnd;
+        
+        if (start !== end) {
+          // Replace selection with summary
+          const newContent = 
+            formData.content.substring(0, start) + 
+            summary + 
+            formData.content.substring(end);
+          
+          setFormData(prev => ({ ...prev, content: newContent }));
+          return;
+        }
+      }
+      
+      // Append summary at the end
+      setFormData(prev => ({ 
+        ...prev, 
+        content: prev.content ? `${prev.content}\n\n## Summary\n${summary}` : summary 
+      }));
+    }
   };
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -160,17 +242,64 @@ const NoteForm: React.FC<NoteFormProps> = ({ noteId }) => {
           className="text-lg font-medium"
         />
         
-        <TextArea
-          label="Content"
-          name="content"
-          value={formData.content}
-          onChange={handleChange}
-          placeholder="Start writing your thoughts..."
-          required
-          fullWidth
-          rows={12}
-          className="font-mono text-base"
-        />
+        <div className="relative">
+          <TextArea
+            label="Content"
+            name="content"
+            value={formData.content}
+            onChange={handleChange}
+            placeholder="Start writing your thoughts..."
+            required
+            fullWidth
+            rows={12}
+            className="font-mono text-base"
+            ref={textAreaRef}
+          />
+          
+          <div className="absolute right-2 top-10 flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={() => setShowAIPrompt(!showAIPrompt)}
+              className="p-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+              title="Generate content with AI"
+            >
+              <Sparkles size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={handleSummarize}
+              className="p-2 bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+              title="Summarize content with AI"
+              disabled={isSummarizing || !formData.content.trim()}
+            >
+              <FileText size={18} />
+            </button>
+          </div>
+          
+          {showAIPrompt && (
+            <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg shadow-sm">
+              <p className="text-sm font-medium text-purple-800 mb-2">Generate content with AI</p>
+              <div className="flex gap-2">
+                <Input
+                  value={aiPrompt}
+                  onChange={(e) => setAIPrompt(e.target.value)}
+                  placeholder="Enter a prompt for AI generation..."
+                  fullWidth
+                  className="bg-white"
+                />
+                <Button
+                  type="button"
+                  onClick={handleGenerate}
+                  isLoading={isGenerating}
+                  className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
+                  disabled={!aiPrompt.trim()}
+                >
+                  Generate
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
         
         <div className="bg-gray-50 p-5 rounded-xl shadow-sm border border-gray-100">
           <label className="block text-sm font-medium text-gray-700 mb-3">
