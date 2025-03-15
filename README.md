@@ -8,6 +8,12 @@
 
 ## ✨ Features
 
+### AI-Powered Features
+- **Smart Content Generation** - Let AI help you generate creative content and expand your ideas
+- **Intelligent Summarization** - Quickly summarize long notes into concise key points
+- **Smart Organization** - AI-powered tagging suggestions and intelligent organization
+
+### Core Features
 - **Easy Note Creation** - Create beautiful notes with a rich text editor
 - **Organize with Tags** - Keep your notes organized with tags
 - **Powerful Search** - Find your notes instantly with our powerful search feature
@@ -40,7 +46,7 @@
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/SmartNotes.git
+   git clone https://github.com/anishsaha46/SmartNotes.git
    cd SmartNotes
    ```
 
