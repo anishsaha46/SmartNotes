@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -6,14 +6,14 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   fullWidth?: boolean;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(({
   label,
   error,
   fullWidth = false,
   className = '',
   id,
   ...props
-}) => {
+}, ref) => {
   const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-');
   
   return (
@@ -36,6 +36,7 @@ const TextArea: React.FC<TextAreaProps> = ({
           ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
           ${className}
         `}
+        ref={ref}
         {...props}
       />
       {error && (
@@ -43,6 +44,9 @@ const TextArea: React.FC<TextAreaProps> = ({
       )}
     </div>
   );
-};
+});
+
+// Add a display name for better debugging
+TextArea.displayName = 'TextArea';
 
 export default TextArea;
